@@ -23,13 +23,12 @@ app.get("/login", (req, res) => {
     //[state] The state parameter gets passed through the whole authorization workflow and can be used to store information that is important for your own application
     "&state= " +
     //[scope] The scope parameter specifies the permissions that the token received has to call different Microsoft services
-    "&scope=" + process.env.SCOPE
+    "&scope=" + process.env.SCOPE + 
+    "&prompt=consent"
     //Optional parameters
     //[Prompt] Can has the values "login", "consent" and "none" and determines which prompt will be shown to the user when he logs in
     //[Login_hint] Can be used to auto fill-in the email adress or user name of the user who wants to authenticate
     //[Domain_hint] Can has the values "consumers" or "organizations" and determines which type of account can log in
-    //TODO:[Code_challenge]
-    //TODO:[Code_challenge_method]
   );
 });
 
@@ -47,7 +46,7 @@ app.get(process.env.REDIRECT_URL, (req, res) => {
     //[url] Tenant and version must match the code retrieval parameters
     url: "https://login.microsoftonline.com/" + process.env.TENANT_ID + "/oauth2/v2.0/token",
     form: {
-      //TODO: Used to specify that we want a Bearer token
+      //[grant_type]: Used to specify that we want a Bearer token
       grant_type: "authorization_code",
       //[code] The code we got from the authorize-call which will be traded for a bearer token
       code: authCode,
@@ -81,9 +80,3 @@ app.get(process.env.REDIRECT_URL, (req, res) => {
 });
 
 app.listen(8080 | process.env.PORT);
-
-//TODO: Implement token verification
-//TODO: Highlight differences in v1, v2, B2B, B2C
-//TODO: Show difference between Enterprise Application and registered App
-//TODO: Point out differences of OpenID and OAuth flow and result
-//TODO: offline_access scope erklären
